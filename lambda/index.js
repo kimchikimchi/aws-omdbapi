@@ -8,12 +8,12 @@ AWS.config.update({
     secretAccessKey: `${process.env.secretAccessKey}`
 });
 
-// Including async function keyword doesn't appear to run rp.  Why?
-exports.handler = (event, context, callback) => {
+// READ about use of async/await use at https://medium.com/codebuddies/getting-to-know-asynchronous-javascript-callbacks-promises-and-async-await-17e0673281ee
+exports.handler = async (event, context, callback) => {
     const url = `https://www.omdbapi.com/?t=${event.queryStringParameters.title}&y=&plot=short&apikey=${process.env.omdbapikey}`;
     addToDynamoDB(event.queryStringParameters.title);
 
-    rp(url)
+    await rp(url)
     .then(function(data) {
         console.log(`Making an api call to ${url}`);
         const response = {
